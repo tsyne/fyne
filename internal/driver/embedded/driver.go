@@ -87,6 +87,9 @@ func (n *noosDriver) doRun() {
 				continue
 			}
 
+			if len(n.wins) == 0 || n.current >= len(n.wins) {
+				continue // no windows yet, ignore event
+			}
 			w := n.wins[n.current].(*noosWindow)
 
 			switch t := e.(type) {
