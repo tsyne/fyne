@@ -2,6 +2,7 @@ package embedded
 
 import (
 	"image"
+	"log"
 	"math"
 	"time"
 
@@ -69,6 +70,7 @@ func (n *noosDriver) Run() {
 }
 
 func (n *noosDriver) doRun() {
+	async.SetMainGoroutine()
 	for _, w := range n.wins {
 		n.renderWindow(w)
 	}
@@ -156,7 +158,9 @@ func (n *noosDriver) handleTouchMove(ev *embedded.TouchMoveEvent, w *noosWindow)
 }
 
 func (n *noosDriver) handleTouchUp(ev *embedded.TouchUpEvent, w *noosWindow) {
+	log.Printf("handleTouchUp: pos=(%f,%f) id=%d", ev.Position.X, ev.Position.Y, ev.ID)
 	w.c.tapUp(ev.Position, ev.ID, func(wid fyne.Tappable, ev *fyne.PointEvent) {
+		log.Printf("Tapped callback invoked for widget: %T", wid)
 		wid.Tapped(ev)
 	}, func(wid fyne.SecondaryTappable, ev *fyne.PointEvent) {
 		wid.TappedSecondary(ev)
